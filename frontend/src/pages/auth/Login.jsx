@@ -45,7 +45,7 @@ export default function Login() {
           <div>
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center">
-                <Shield className="h-5 w-5 text-blue-300" />
+                <Shield className="h-5 w-5 text-primary-300" />
               </div>
               <span className="text-white text-lg font-semibold tracking-tight">CrediSight AI</span>
             </div>
@@ -56,7 +56,7 @@ export default function Login() {
             <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
               Corporate Credit Decisioning Platform
             </h1>
-            <p className="text-blue-200/80 text-base leading-relaxed mb-8">
+            <p className="text-primary-200/80 text-base leading-relaxed mb-8">
               AI-powered credit evaluation, risk scoring, and automated CAM report
               generation — empowering banks with faster, data-driven lending decisions.
             </p>
@@ -67,15 +67,15 @@ export default function Login() {
                 'One-click CAM report generation',
               ].map((item) => (
                 <div key={item} className="flex items-center gap-3">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
-                  <span className="text-blue-100/90 text-sm">{item}</span>
+                  <div className="w-1.5 h-1.5 rounded-full bg-primary-400 shrink-0" />
+                  <span className="text-primary-100/90 text-sm">{item}</span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Bottom — Footer */}
-          <p className="text-blue-300/50 text-xs tracking-wide uppercase">Secure Access Portal</p>
+          <p className="text-primary-300/50 text-xs tracking-wide uppercase">Secure Access Portal</p>
         </div>
       </div>
 

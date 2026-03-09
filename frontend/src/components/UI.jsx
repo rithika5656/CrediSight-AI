@@ -45,7 +45,7 @@ export function StatCard({ title, value, icon: Icon, color = 'primary' }) {
     yellow: 'bg-yellow-50 text-yellow-600',
     red: 'bg-red-50 text-red-600',
     purple: 'bg-purple-50 text-purple-600',
-    blue: 'bg-blue-50 text-blue-600',
+    blue: 'bg-primary-50 text-primary-600',
   };
 
   return (
