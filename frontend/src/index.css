@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  @apply bg-gray-50 text-gray-900;
+}
+
+/* ── Auth Pages ─────────────────────────────────────────── */
+
+.auth-left-panel {
+  background: linear-gradient(135deg, #0A1F44 0%, #0F2D5E 40%, #132E55 70%, #091A38 100%);
+}
+
+/* Geometric background accents */
+.auth-geo {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.06;
+  background: white;
+}
+.auth-geo-1 { width: 500px; height: 500px; top: -120px; right: -100px; }
+.auth-geo-2 { width: 300px; height: 300px; bottom: -60px; left: -80px; }
+.auth-geo-3 { width: 180px; height: 180px; top: 40%; left: 55%; opacity: 0.04; }
+.auth-geo-4 {
+  width: 600px; height: 600px; bottom: -250px; right: -200px;
+  border-radius: 50%;
+  opacity: 0.03;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: transparent;
+}
+
+.auth-input {
+  @apply w-full px-3.5 py-2.5 border border-gray-200 rounded-xl text-sm
+    bg-gray-50/50
+    focus:outline-none focus:ring-2 focus:ring-[#0A1F44]/20 focus:border-[#0A1F44]/40 focus:bg-white
+    placeholder:text-gray-400
+    transition-all duration-200;
+}
+
+.auth-btn {
+  background: #0A1F44;
+  @apply text-white px-5 py-2.5 rounded-xl text-sm font-semibold
+    transition-all duration-200
+    hover:shadow-lg hover:shadow-[#0A1F44]/25
+    focus:outline-none focus:ring-2 focus:ring-[#0A1F44]/40 focus:ring-offset-2
+    disabled:opacity-50 disabled:cursor-not-allowed;
+}
+.auth-btn:hover:not(:disabled) {
+  background: #0E2A55;
+}
+
+/* ── Shared Components ──────────────────────────────────── */
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 text-white px-4 py-2 rounded-lg font-medium
+      hover:bg-primary-700 transition-colors duration-150
+      focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+      disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 px-4 py-2 rounded-lg font-medium border border-gray-300
+      hover:bg-gray-50 transition-colors duration-150
+      focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+
+  .btn-danger {
+    @apply bg-red-600 text-white px-4 py-2 rounded-lg font-medium
+      hover:bg-red-700 transition-colors duration-150
+      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+
+  .input-field {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg text-sm
+      focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
+      placeholder:text-gray-400;
+  }
+
+  .card {
+    @apply bg-white rounded-xl border border-gray-200 shadow-sm;
+  }
+
+  .badge-success {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-danger {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800;
+  }
+
+  .badge-info {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800;
+  }
+
+  .badge-neutral {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800;
+  }
+}
