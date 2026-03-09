@@ -105,3 +105,23 @@ async def update_application(
     await db.flush()
     await db.refresh(app)
     return LoanApplicationResponse.model_validate(app)
+
+
+# Delete endpoint for applicants to delete their own applications
+@router.delete("/{application_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_application(
+    application_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(require_role(UserRole.APPLICANT)),
+):
+    result = await db.execute(
+        select(LoanApplication).where(LoanApplication.id == application_id)
+    )
+    app = result.scalar_one_or_none()
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+    if app.applicant_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Access denied")
+    await db.delete(app)
+    await db.flush()
+    return None

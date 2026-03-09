@@ -80,7 +80,7 @@ export default function ApplicationDetail() {
   if (error) return <Layout><p className="text-red-500">{error}</p></Layout>;
   if (!application) return <Layout><p className="text-gray-500">Application not found.</p></Layout>;
 
-  const rec = application.ai_recommendation;
+  // Remove AI recommendation, risk, and internal fields for applicants
 
   return (
     <Layout>
@@ -97,178 +97,113 @@ export default function ApplicationDetail() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Application Details */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="card p-6">
-            <h2 className="text-lg font-semibold mb-4">Company Details</h2>
-            <dl className="grid grid-cols-2 gap-4">
-              <div>
-                <dt className="text-sm text-gray-500">CIN Number</dt>
-                <dd className="text-sm font-medium mt-1">{application.cin_number}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-gray-500">GST Number</dt>
-                <dd className="text-sm font-medium mt-1">{application.gst_number}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-gray-500">Industry Sector</dt>
-                <dd className="text-sm font-medium mt-1">{application.industry_sector}</dd>
-              </div>
-              <div>
-                <dt className="text-sm text-gray-500">Requested Amount</dt>
-                <dd className="text-sm font-medium mt-1">{formatCurrency(application.requested_loan_amount)}</dd>
-              </div>
-              <div className="col-span-2">
-                <dt className="text-sm text-gray-500">Business Description</dt>
-                <dd className="text-sm mt-1">{application.business_description || 'N/A'}</dd>
-              </div>
-            </dl>
-          </div>
-
-          {/* Documents */}
-          <div className="card p-6">
-            <h2 className="text-lg font-semibold mb-4">Documents</h2>
-
-            <div className="flex items-center gap-3 mb-4">
-              <select
-                className="input-field w-auto"
-                value={uploadType}
-                onChange={(e) => setUploadType(e.target.value)}
-              >
-                {DOC_TYPES.map((d) => (
-                  <option key={d.value} value={d.value}>{d.label}</option>
-                ))}
-              </select>
-              <label className="btn-primary flex items-center gap-2 text-sm cursor-pointer">
-                <Upload className="h-4 w-4" />
-                {uploading ? 'Uploading...' : 'Upload'}
-                <input type="file" className="hidden" accept=".pdf,.png,.jpg,.jpeg,.tiff" onChange={handleUpload} disabled={uploading} />
-              </label>
+      <div className="max-w-4xl mx-auto">
+        <Link to="/applicant/applications" className="inline-flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-4">
+          <ArrowLeft className="h-4 w-4" /> Back to applications
+        </Link>
+        <div className="card p-6 mb-6">
+          <h1 className="text-2xl font-bold mb-2">{application.company_name}</h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="text-sm text-gray-500">CIN Number</div>
+              <div className="text-base font-medium mb-2">{application.cin_number}</div>
             </div>
-
-            {uploadError && (
-              <div className="bg-red-50 text-red-700 text-sm px-4 py-2 rounded-lg mb-4">{uploadError}</div>
-            )}
-
-            {documents.length === 0 ? (
-              <p className="text-sm text-gray-400">No documents uploaded yet.</p>
-            ) : (
-              <div className="space-y-2">
-                {documents.map((doc) => (
-                  <div key={doc.id} className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <FileText className="h-4 w-4 text-gray-400" />
-                      <div>
-                        <p className="text-sm font-medium">{doc.file_name}</p>
-                        <p className="text-xs text-gray-500">
-                          {DOC_TYPES.find((d) => d.value === doc.document_type)?.label || doc.document_type}
-                          {doc.file_size && ` -- ${(doc.file_size / 1024).toFixed(0)} KB`}
-                        </p>
-                      </div>
-                    </div>
-                    <span className={`text-xs font-medium ${doc.status === 'processed' ? 'text-green-600' : doc.status === 'failed' ? 'text-red-600' : 'text-gray-500'}`}>
-                      {doc.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div>
+              <div className="text-sm text-gray-500">GST Number</div>
+              <div className="text-base font-medium mb-2">{application.gst_number}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-500">Industry</div>
+              <div className="text-base font-medium mb-2">{application.industry_sector}</div>
+            </div>
+            <div>
+              <div className="text-sm text-gray-500">Requested Loan Amount</div>
+              <div className="text-base font-medium mb-2">{formatCurrency(application.requested_loan_amount)}</div>
+            </div>
           </div>
+          <div className="mt-4">
+            <div className="text-sm text-gray-500">Business Description</div>
+            <div className="text-base mb-2">{application.business_description || 'N/A'}</div>
+          </div>
+        </div>
 
-          {/* AI Recommendation */}
-          {rec && (
-            <div className="card p-6">
-              <h2 className="text-lg font-semibold mb-4">AI Recommendation</h2>
-              <div className="flex items-center gap-3 mb-4">
-                {rec.decision === 'approve' ? (
-                  <CheckCircle2 className="h-6 w-6 text-green-500" />
-                ) : (
-                  <XCircle className="h-6 w-6 text-red-500" />
-                )}
-                <span className={`text-lg font-bold ${rec.decision === 'approve' ? 'text-green-700' : 'text-red-700'}`}>
-                  {rec.decision === 'approve' ? 'APPROVE' : 'REJECT'}
-                </span>
-              </div>
-              <dl className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                  <dt className="text-sm text-gray-500">Recommended Limit</dt>
-                  <dd className="text-sm font-medium mt-1">{formatCurrency(rec.recommended_loan_limit)}</dd>
-                </div>
-                <div>
-                  <dt className="text-sm text-gray-500">Suggested Interest Rate</dt>
-                  <dd className="text-sm font-medium mt-1">{rec.suggested_interest_rate}% p.a.</dd>
-                </div>
-              </dl>
-              {rec.reasoning && (
-                <div>
-                  <h3 className="text-sm font-medium text-gray-700 mb-2">Reasoning</h3>
-                  <ul className="space-y-1">
-                    {rec.reasoning.map((r, i) => (
-                      <li key={i} className="text-sm text-gray-600 flex items-start gap-2">
-                        <span className="text-gray-300 mt-1">--</span>
-                        {r}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+        <div className="card p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4">Uploaded Documents</h2>
+          {/* Upload Document Button */}
+          <div className="flex items-center gap-3 mb-4">
+            <select
+              className="input-field w-auto"
+              value={uploadType}
+              onChange={(e) => setUploadType(e.target.value)}
+            >
+              <option value="gst_filing">GST Filing</option>
+              <option value="bank_statement">Bank Statement (last 6 months)</option>
+              <option value="income_tax_return">Income Tax Return</option>
+              <option value="annual_report">Annual Report</option>
+              <option value="legal_document">Legal Document</option>
+              <option value="balance_sheet">Balance Sheet</option>
+              <option value="profit_loss">Profit & Loss Statement</option>
+              <option value="registration_certificate">Company Registration Certificate</option>
+              <option value="collateral">Collateral Documents</option>
+            </select>
+            <label className="btn-primary flex items-center gap-2 text-sm cursor-pointer">
+              <Upload className="h-4 w-4" />
+              {uploading ? 'Uploading...' : 'Upload Document'}
+              <input type="file" className="hidden" accept="application/pdf" onChange={handleUpload} disabled={uploading} />
+            </label>
+          </div>
+          {uploadError && (
+            <div className="bg-red-50 text-red-700 text-sm px-4 py-2 rounded-lg mb-4">{uploadError}</div>
+          )}
+          {/* Document Table */}
+          {documents.length === 0 ? (
+            <p className="text-sm text-gray-400">No documents uploaded yet.</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-gray-50 border-b border-gray-200">
+                    <th className="px-4 py-2 text-left">Document Type</th>
+                    <th className="px-4 py-2 text-left">File Name</th>
+                    <th className="px-4 py-2 text-left">Upload Date</th>
+                    <th className="px-4 py-2 text-left">Status</th>
+                    <th className="px-4 py-2 text-left">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((doc) => (
+                    <tr key={doc.id} className="border-b">
+                      <td className="px-4 py-2">{DOC_TYPES.find((d) => d.value === doc.document_type)?.label || doc.document_type}</td>
+                      <td className="px-4 py-2">{doc.file_name}</td>
+                      <td className="px-4 py-2">{formatDate(doc.created_at)}</td>
+                      <td className="px-4 py-2">
+                        <span className={`text-xs font-medium ${doc.status === 'processed' ? 'text-green-600' : doc.status === 'failed' ? 'text-red-600' : 'text-gray-500'}`}>{doc.status}</span>
+                      </td>
+                      <td className="px-4 py-2">
+                        <a href={doc.file_path} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">View</a>
+                        {/* Optionally add Download button */}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
-          <div className="card p-6">
-            <h3 className="text-sm font-semibold text-gray-700 mb-3">Status</h3>
-            <StatusBadge status={application.status} />
-            <p className="text-xs text-gray-500 mt-2">Applied {formatDate(application.created_at)}</p>
-          </div>
-
-          {application.risk_score && (
-            <div className="card p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Risk Assessment</h3>
-              <div className="text-3xl font-bold text-center mb-2">{application.risk_score}</div>
-              <div className="text-center">
-                <RiskBadge level={application.risk_level} />
-              </div>
-            </div>
-          )}
-
-          {application.cam_report_path && (
-            <div className="card p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">CAM Report</h3>
-              <div className="space-y-2">
-                <button onClick={() => handleDownloadCAM('pdf')} className="btn-primary w-full flex items-center justify-center gap-2 text-sm">
-                  <Download className="h-4 w-4" /> Download PDF
-                </button>
-                <button onClick={() => handleDownloadCAM('docx')} className="btn-secondary w-full flex items-center justify-center gap-2 text-sm">
-                  <Download className="h-4 w-4" /> Download Word
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Five Cs Summary */}
-          {application.five_cs_evaluation && (
-            <div className="card p-6">
-              <h3 className="text-sm font-semibold text-gray-700 mb-3">Five Cs Evaluation</h3>
-              <div className="space-y-3">
-                {Object.entries(application.five_cs_evaluation).map(([key, data]) => (
-                  <div key={key}>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="capitalize font-medium">{key}</span>
-                      <span className="text-gray-500">{data.score}/100</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
-                      <div
-                        className={`h-1.5 rounded-full ${data.score >= 70 ? 'bg-green-500' : data.score >= 40 ? 'bg-yellow-500' : 'bg-red-500'}`}
-                        style={{ width: `${data.score}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
-              </div>
+        <div className="card p-6 mb-6">
+          <h2 className="text-lg font-semibold mb-4">Application Status</h2>
+          <StatusBadge status={application.status} />
+          <p className="text-xs text-gray-500 mt-2">Applied {formatDate(application.created_at)}</p>
+          {/* If approved, show approved details */}
+          {application.status === 'approved' && (
+            <div className="mt-4 space-y-2">
+              <div className="text-sm text-gray-500">Approved Loan Amount</div>
+              <div className="text-base font-medium">{formatCurrency(application.approved_loan_amount)}</div>
+              <div className="text-sm text-gray-500">Interest Rate</div>
+              <div className="text-base font-medium">{application.interest_rate}% p.a.</div>
+              <div className="text-sm text-gray-500">Approval Date</div>
+              <div className="text-base font-medium">{formatDate(application.approval_date)}</div>
             </div>
           )}
         </div>

@@ -18,32 +18,24 @@ export default function ApplicantDashboard() {
       .finally(() => setLoading(false));
   }, []);
 
-  const submitted = applications.filter((a) => a.status === 'submitted').length;
-  const underReview = applications.filter((a) => a.status === 'under_review').length;
-  const approved = applications.filter((a) => a.status === 'approved').length;
-
   return (
     <Layout>
+      {/* Section 1: Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold">Welcome, {user?.full_name}</h1>
         <p className="text-gray-500 mt-1">Manage your loan applications</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <StatCard title="Total Applications" value={applications.length} icon={FileText} color="primary" />
-        <StatCard title="Submitted" value={submitted} icon={Clock} color="blue" />
-        <StatCard title="Under Review" value={underReview} icon={Clock} color="yellow" />
-        <StatCard title="Approved" value={approved} icon={CheckCircle2} color="green" />
-      </div>
-
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold">Recent Applications</h2>
-        <Link to="/applicant/apply" className="btn-primary flex items-center gap-2 text-sm">
-          <Plus className="h-4 w-4" />
-          New Application
+      {/* Section 2: Primary Action */}
+      <div className="flex items-center justify-between mb-6">
+        <div />
+        <Link to="/applicant/apply" className="btn-primary flex items-center gap-2 text-base px-6 py-2">
+          <Plus className="h-5 w-5" />
+          New Loan Application
         </Link>
       </div>
 
+      {/* Section 3: My Applications */}
       {loading ? (
         <LoadingSpinner />
       ) : applications.length === 0 ? (
@@ -53,7 +45,7 @@ export default function ApplicantDashboard() {
           <p className="mt-1 text-sm text-gray-500">Create your first loan application to get started.</p>
           <Link to="/applicant/apply" className="btn-primary inline-flex items-center gap-2 mt-4 text-sm">
             <Plus className="h-4 w-4" />
-            New Application
+            New Loan Application
           </Link>
         </div>
       ) : (
@@ -63,6 +55,7 @@ export default function ApplicantDashboard() {
               <tr className="bg-gray-50 border-b border-gray-200">
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Company</th>
+                <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Industry</th>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Amount</th>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
                 <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
@@ -74,6 +67,7 @@ export default function ApplicantDashboard() {
                 <tr key={app.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 text-sm font-mono">#{app.id}</td>
                   <td className="px-6 py-4 text-sm font-medium">{app.company_name}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{app.industry_sector}</td>
                   <td className="px-6 py-4 text-sm">{formatCurrency(app.requested_loan_amount)}</td>
                   <td className="px-6 py-4"><StatusBadge status={app.status} /></td>
                   <td className="px-6 py-4 text-sm text-gray-500">{formatDate(app.created_at)}</td>

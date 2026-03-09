@@ -38,6 +38,7 @@ export const getMyApplications = () => api.get('/applications/my');
 export const getAllApplications = () => api.get('/applications/all');
 export const getApplication = (id) => api.get(`/applications/${id}`);
 export const updateApplication = (id, data) => api.patch(`/applications/${id}`, data);
+export const deleteApplication = (id) => api.delete(`/applications/${id}`);
 
 // Documents
 export const uploadDocument = (formData) =>
